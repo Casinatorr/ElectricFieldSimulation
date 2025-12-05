@@ -23,7 +23,7 @@ namespace conf {
 	}
 
 	namespace calculator {
-		inline int worldUnitsPerVal = 2;
+		inline int worldUnitsPerVal = 10;
 		inline float worldUnitsPerUnit = 100.f;
 		inline const float coulombConstant = 1.f;
 	}

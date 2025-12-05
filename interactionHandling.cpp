@@ -6,6 +6,7 @@
 #include "pointCharge.h"
 #include <SFML/Graphics.hpp>
 #include "renderingRegistry.h"
+#include "calculator.h"
 
 
 void PlaceChargeAction() {
@@ -69,4 +70,8 @@ void ClickChargeAction() {
 	State::editingCharge = State::hoveredCharge;
 	State::movementOffset = State::editingCharge->GetPosition() - State::mousePos;
 	ImGui::OpenPopup("ChargeClicked");
+}
+
+void RecalculateAction() {
+	CalulculateGrid();
 }

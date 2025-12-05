@@ -14,4 +14,6 @@ void PlaceChargeDown();
 
 void ClickChargeAction();
 
+void RecalculateAction();
+
 #endif

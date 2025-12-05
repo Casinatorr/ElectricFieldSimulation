@@ -3,6 +3,7 @@
 #define CHARGE_H
 
 #include <SFML/Graphics.hpp>
+#include "configuration.h"
 
 class Charge {
 	public:

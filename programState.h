@@ -26,6 +26,9 @@ namespace State {
 	inline Charge* hoveredCharge = nullptr;
 	inline Charge* editingCharge = nullptr;
 	inline sf::Vector2f movementOffset;
+	inline std::shared_ptr<sf::Image> currentFieldImage = nullptr;
+	inline std::shared_ptr<sf::Texture> currentFieldTexture = nullptr;
+	inline std::shared_ptr<sf::Sprite> currentFieldSprite = nullptr;
 }
 
 #endif

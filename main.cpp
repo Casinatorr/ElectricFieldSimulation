@@ -11,6 +11,7 @@
 
 int main()
 {
+    
     sf::ContextSettings settings = sf::ContextSettings();
     settings.antiAliasingLevel = 8;
     sf::RenderWindow window(sf::VideoMode(conf::dimensions::windowDims), "Electric Field Visualisation", sf::State::Windowed, settings);
@@ -37,6 +38,8 @@ int main()
 
 
         window.clear(conf::colors::backgroundCol);
+        if (State::currentFieldSprite)
+            window.draw(*State::currentFieldSprite);
 
         Draw(&window);
 

@@ -75,6 +75,10 @@ void HandleEvents(sf::RenderWindow* window) {
                 //place a new charge
                 PlaceChargeAction();
             }
+
+            if (keyboardCode == sf::Keyboard::Key::C) {
+                RecalculateAction();
+            }
         }
 
         if (event->is<sf::Event::MouseButtonPressed>()) {
