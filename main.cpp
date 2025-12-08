@@ -7,6 +7,7 @@
 #include "eventHandling.h"
 #include "interactionHandling.h"
 #include "imguiDefinitions.h"
+#include "calculator.h"
 #include "renderingRegistry.h"
 
 int main()
@@ -38,8 +39,11 @@ int main()
 
 
         window.clear(conf::colors::backgroundCol);
-        if (State::currentFieldSprite)
+        if (State::currentFieldSprite) {
             window.draw(*State::currentFieldSprite);
+            //mouse thing
+            CalculateEquipotLines(State::mousePos, &window);
+        }
 
         Draw(&window);
 

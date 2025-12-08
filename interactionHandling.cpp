@@ -73,5 +73,6 @@ void ClickChargeAction() {
 }
 
 void RecalculateAction() {
-	CalulculateGrid();
+	CalculateGrids();
 }
+

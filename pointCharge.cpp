@@ -28,6 +28,10 @@ bool PointCharge::IsInside(sf::Vector2f point) {
 	return (point - body.getPosition()).lengthSquared() <= conf::dimensions::pointChargeRadius * conf::dimensions::pointChargeRadius;
 }
 
+bool PointCharge::PhysicsIsInside(sf::Vector2f point) {
+	return (point - body.getPosition()).lengthSquared() <= conf::dimensions::calculatorChargeRadius * conf::dimensions::calculatorChargeRadius;
+}
+
 void PointCharge::Hover() {
 	body.setOutlineThickness(conf::dimensions::pointChargeOutlineThickness);
 }
@@ -83,4 +87,8 @@ sf::Vector2f PointCharge::GetFieldAt(sf::Vector2f pos) {
 	sf::Vector2f dir = pos - ToPhysicsPos(body.getPosition());
 	float sqrDst = dir.lengthSquared();
 	return dir.normalized() * totalCharge* conf::calculator::coulombConstant / sqrDst;
+}
+
+float PointCharge::GetPotentialAt(sf::Vector2f pos) {
+	return conf::calculator::coulombConstant * totalCharge / (pos - ToPhysicsPos(body.getPosition())).length();
 }

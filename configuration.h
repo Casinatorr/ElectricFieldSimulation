@@ -15,6 +15,7 @@ namespace conf {
 	namespace dimensions {
 		inline const sf::Vector2u windowDims = { 1600, 900 };
 		inline float pointChargeRadius = 13.f;
+		inline float calculatorChargeRadius = 10.f;
 		inline float pointChargeOutlineThickness = 2.f;
 	}
 
@@ -23,7 +24,7 @@ namespace conf {
 	}
 
 	namespace calculator {
-		inline int worldUnitsPerVal = 10;
+		inline int worldUnitsPerVal = 2;
 		inline float worldUnitsPerUnit = 100.f;
 		inline const float coulombConstant = 1.f;
 	}

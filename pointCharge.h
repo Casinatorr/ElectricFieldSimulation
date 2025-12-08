@@ -15,11 +15,13 @@ class PointCharge : public Charge {
 	void Draw(sf::RenderWindow* window) override;
 	void MoveTo(sf::Vector2f position) override;
 	bool IsInside(sf::Vector2f point) override;
+	bool PhysicsIsInside(sf::Vector2f point) override;
 	void Hover() override;
 	void Unhover() override;
 	void EditedCharge() override;
 	sf::Vector2f GetPosition() override;
 	sf::Vector2f GetFieldAt(sf::Vector2f pos) override;
+	float GetPotentialAt(sf::Vector2f pos) override;
 
 	private:
 	float charge;

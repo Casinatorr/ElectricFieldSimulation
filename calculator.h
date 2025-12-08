@@ -3,9 +3,9 @@
 #define CALCULATOR_H
 
 #include <SFML/Graphics.hpp>
+#include <array>
 
-void CalulculateGrid();
+void CalculateGrids();
 
-sf::Image InterpolateGrid();
-
+void CalculateEquipotLines(sf::Vector2f pos, sf::RenderWindow* window);
 #endif

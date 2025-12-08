@@ -13,6 +13,7 @@ class Charge {
 	virtual void MoveTo(sf::Vector2f position) = 0;
 	virtual void Draw(sf::RenderWindow* window) = 0;
 	virtual bool IsInside(sf::Vector2f point) = 0;
+	virtual bool PhysicsIsInside(sf::Vector2f point) = 0;
 	virtual void Hover() = 0;
 	virtual void Unhover() = 0;
 
@@ -20,6 +21,7 @@ class Charge {
 
 	virtual sf::Vector2f GetPosition() = 0;
 	virtual sf::Vector2f GetFieldAt(sf::Vector2f pos) = 0;
+	virtual float GetPotentialAt(sf::Vector2f pos) = 0;
 
 	Charge() : id_(generateId()) {}
 	virtual ~Charge() = default;
