@@ -79,6 +79,16 @@ void HandleEvents(sf::RenderWindow* window) {
             if (keyboardCode == sf::Keyboard::Key::C) {
                 RecalculateAction();
             }
+
+            if (keyboardCode == sf::Keyboard::Key::Right) {
+                conf::calculator::deltaVWeighting *= 1.2f;
+                std::cout << conf::calculator::deltaVWeighting << "\n";
+            }
+            if (keyboardCode == sf::Keyboard::Key::Left) {
+                conf::calculator::deltaVWeighting /= 1.2f;
+                std::cout << conf::calculator::deltaVWeighting << "\n";
+
+            }
         }
 
         if (event->is<sf::Event::MouseButtonPressed>()) {

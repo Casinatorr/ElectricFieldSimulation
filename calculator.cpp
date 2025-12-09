@@ -173,8 +173,49 @@ sf::Vector2f FineGridPosition(int index) {
 	return { float(x), float(y) };
 }
 
+sf::Vector2i FineGridPositionDisc(int index) {
+	int x = index % imgDimsX;
+	int y = index / imgDimsX;
+	return { x, y };
+}
+
 float Dot(sf::Vector2f a, sf::Vector2f b) {
 	return a.x * b.x + a.y * b.y;
+}
+
+bool IsOnGridEdge(sf::Vector2i pos) {
+	return (pos.x % (imgDimsX - 1) == 0) || (pos.y % (imgDimsY - 1) == 0);
+}
+
+//maybe use arrays
+std::vector<int> GetNeighborIndices(int gridIndex) {
+	return {gridIndex-1, gridIndex+1, gridIndex+imgDimsX, gridIndex-imgDimsX, gridIndex+imgDimsX-1, gridIndex+imgDimsX+1, gridIndex-imgDimsX-1, gridIndex-imgDimsX+1};
+}
+
+
+void DrawThickLine(sf::RenderWindow* window, sf::Vector2f start, sf::Vector2f end, float thickness, sf::Color color) {
+	// Compute direction and length
+	sf::Vector2f direction = end - start;
+	float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+	if (length == 0)
+		return;
+
+	// Normalize direction
+	sf::Vector2f unitDir = direction / length;
+
+	// Compute angle in degrees
+	float angle = std::atan2(direction.y, direction.x);
+
+	// Create rectangle
+	sf::RectangleShape line(sf::Vector2f(length, thickness));
+	line.setPosition(start);
+	line.setRotation(sf::radians(angle));
+	line.setFillColor(color);
+
+	// Center thickness around the line
+	line.setOrigin({ 0.f, thickness / 2.f });
+
+	window->draw(line);
 }
 
 
@@ -183,7 +224,79 @@ void CalculateEquipotLines(sf::Vector2f pos, sf::RenderWindow* window) {
 
 	std::vector<sf::Vector2f> points;
 
-	int numPoints = 500;
+
+	int numPoints = 5000;
+
+	int gridIndex = NearestGridIndex(currentPos);
+
+
+
+	if (gridIndex < 0)
+		return;
+
+	float potential = finePotentialGrid[gridIndex];
+
+	points.push_back(currentPos);
+	int lastGridIndex = -1;
+
+	//right side
+	for (int i = 0; i < numPoints; i++) {
+		auto discPos = FineGridPositionDisc(gridIndex);
+		if (IsOnGridEdge(discPos))
+			break;
+
+		auto neighbors = GetNeighborIndices(gridIndex);
+		float bestScore = std::numeric_limits<float>::max();
+		int bestIndex = -1;
+		auto perpGradient = GradientPerpendicular(gridIndex);
+		for (auto nIndex : neighbors) {
+			if (nIndex == lastGridIndex)
+				continue;
+			auto nPot = finePotentialGrid[nIndex];
+			float deltaV = fabs(nPot - potential);
+			auto offset = FineGridPosition(nIndex) - currentPos;
+			float score = conf::calculator::deltaVWeighting*deltaV - 1.f * (Dot(offset.normalized(), perpGradient));
+			if (score < bestScore) {
+				bestIndex = nIndex;
+				bestScore = score;
+			}
+		}
+		lastGridIndex = gridIndex;
+		gridIndex = bestIndex;
+		currentPos = FineGridPosition(gridIndex);
+		points.push_back(currentPos);
+	}
+
+	std::vector<sf::Vector2f> smoothed;
+	for (size_t i = 1; i < points.size() - 1; i++) {
+		sf::Vector2f avg = (points[i - 1] + points[i] + points[i + 1]) / 3.f;
+		smoothed.push_back(avg);
+	}
+
+	if (smoothed.size() < 2)
+		return;
+
+	for (int i = 0; i < smoothed.size() - 1; i++) {
+		DrawThickLine(window, smoothed[i], smoothed[i + 1], 2.f, sf::Color::White);
+	}
+
+	/*
+	sf::VertexArray va(sf::PrimitiveType::LineStrip, smoothed.size());
+	for (size_t i = 0; i < smoothed.size(); i++) {
+		va[i].position = smoothed[i];
+		va[i].color = sf::Color::White;
+	}
+	window->draw(va);
+	*/
+}
+
+/*
+void CalculateEquipotLines(sf::Vector2f pos, sf::RenderWindow* window) {
+	sf::Vector2f currentPos = pos;
+
+	std::vector<sf::Vector2f> points;
+
+	int numPoints = 5000;
 
 	int gridIndex = NearestGridIndex(currentPos);
 
@@ -216,11 +329,7 @@ void CalculateEquipotLines(sf::Vector2f pos, sf::RenderWindow* window) {
 		auto secondIter = firstIter;
 		if (gradientLen != 0) {
 			float secondStep = deltaV / gradientLen;
-			/*
-			if (fabs(secondStep) > secondStepMaxDst) {
-				secondStep = ((0 < secondStep) - (secondStep < 0)) * secondStepMaxDst; //sgn function
-			}
-			*/
+
 			if (ImGui::IsKeyDown(ImGuiKey::ImGuiKey_F)) {
 				secondIter += newGradient.normalized() * secondStep;
 				std::cout << deltaV << "\n";
@@ -240,31 +349,8 @@ void CalculateEquipotLines(sf::Vector2f pos, sf::RenderWindow* window) {
 	}
 	window->draw(va);
 
-	/*
-	points.clear();
-
-	points.push_back(pos);
-	currentPos = pos;
-	gridIndex = NearestGridIndex(currentPos);
-	for (int i = 0; i < numPoints; i++) {
-		currentPos -= EquipotNextOffset(gridIndex);
-		gridIndex = NearestGridIndex(currentPos);
-		if (gridIndex < 0)
-			break;
-
-		points.push_back(currentPos);
-
-	}
-
-	va = sf::VertexArray(sf::PrimitiveType::LineStrip, points.size());
-	for (size_t i = 0; i < points.size(); i++) {
-		va[i].position = points[i];
-		va[i].color = sf::Color::White;
-	}
-	window->draw(va);
-	*/
-	
 	
 }
+*/
 
 

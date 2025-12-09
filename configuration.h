@@ -27,6 +27,8 @@ namespace conf {
 		inline int worldUnitsPerVal = 2;
 		inline float worldUnitsPerUnit = 100.f;
 		inline const float coulombConstant = 1.f;
+
+		inline float deltaVWeighting = 0.01f;
 	}
 }
 
