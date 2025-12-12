@@ -124,7 +124,8 @@ void CalculateGrids() {
 	for (int x = 0; x < imgDimsX; x++) {
 		for (int y = 0; y < imgDimsY; y++) {
 			float normalizedVal = (finePotentialGrid[imgDimsX * y + x] - lowestPixelPot) / pixelPotRange;
-			normalizedVal = floor(normalizedVal * 100.0f) / 99.0f;
+			float sigmoid = 1.f / (1.f + exp(-8.f * (normalizedVal - 0.5f)));
+			normalizedVal = floor(sigmoid * 50.0f) / 49.0f;
 			retImg->setPixel({ static_cast<uint32_t>(x), static_cast<uint32_t>(y) }, sf::Color(normalizedVal * 255, normalizedVal * 255, normalizedVal * 255));
 		}
 	}
